@@ -1,3 +1,5 @@
+
+
 const defaultState = {
     inputValue : 'Write Something',
     list: [
@@ -21,6 +23,12 @@ const reducer = (state = defaultState, action)=>{
         newState.list.splice(action.index,1)
         return newState
     }
+    if(action.type==='getList'){
+        let newState = JSON.parse(JSON.stringify(state))
+        newState.list = action.data.data.list
+        return newState
+    }
+
 
     return state
 }
