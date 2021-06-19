@@ -2,21 +2,6 @@ import React, {useEffect, useState} from 'react'
 import 'antd/dist/antd.css'
 import store from './store'
 import TodoListUI from './TodoListUI'
-import axios from 'axios';
-
-const getTodoList = ()=>{
-    return (dispatch)=> {
-        axios.get('http://rap2api.taobao.org/app/mock/data/1810019').then((response) => {
-            console.log(response)
-            const data = response.data
-            dispatch({
-                type: 'getList',
-                data
-            })
-        })
-    }
-}
-
 
 
 
@@ -28,8 +13,9 @@ const TodoList = () => {
     const state = store.getState()
     useEffect(() => {
         store.subscribe(storeChange)
-        const action = getTodoList()
-        store.dispatch(action)
+        store.dispatch({
+            type:'getMyList'
+        })
 
 
     }, [])
