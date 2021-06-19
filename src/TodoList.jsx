@@ -1,35 +1,42 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import 'antd/dist/antd.css'
 import store from './store'
 import TodoListUI from './TodoListUI'
+import {connect} from 'react-redux'
 
 
-
-const TodoList = () => {
-    const [, setState] = useState({})
-    const storeChange = () => {
-        setState({})
-    }
-    const state = store.getState()
+const TodoList = (props) => {
     useEffect(() => {
-        store.subscribe(storeChange)
-        store.dispatch({
-            type:'getMyList'
-        })
-
-
+        props.getMyList()
     }, [])
+    return (
+        <TodoListUI
+            inputValue={props.inputValue}
+            changeInputValue={props.changeInputValue}
+            clickBtn={props.clickBtn}
+            list={props.list}
+            deleteItem={props.deleteItem}
+        />
+    )
+}
+
+const stateToProps = (state) => {
+    return {
+        inputValue: state.inputValue,
+        list: state.list
+    }
+}
+const dispatchToProps = (dispatch) => {
     const changeInputValue = (e) => {
         const action = {
             type: 'changeInput',
             value: e.target.value
         }
-        store.dispatch(action)
+        dispatch(action)
     }
     const clickBtn = () => {
         store.dispatch({
             type: 'addItem',
-            value: state.inputValue
         })
     }
     const deleteItem = (index) => {
@@ -38,16 +45,16 @@ const TodoList = () => {
             value: index
         }) // 传递到store, reducer
     }
-    return (
-        <TodoListUI
-            inputValue={state.inputValue}
-            changeInputValue={changeInputValue}
-            clickBtn={clickBtn}
-            list={state.list}
-            deleteItem={deleteItem}
-        />
-
-    )
+    const getMyList = () => {
+        store.dispatch({
+            type: 'getMyList'
+        })
+    }
+    return {
+        changeInputValue,
+        clickBtn,
+        deleteItem,
+        getMyList
+    }
 }
-
-export default TodoList
+export default connect(stateToProps, dispatchToProps)(TodoList)
