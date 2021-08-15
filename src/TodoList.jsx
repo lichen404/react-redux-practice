@@ -6,9 +6,10 @@ import {connect} from 'react-redux'
 
 
 const TodoList = (props) => {
+    const {getMyList} = props
     useEffect(() => {
-        props.getMyList()
-    }, [])
+        getMyList()
+    }, [getMyList])
     return (
         <TodoListUI
             inputValue={props.inputValue}
